@@ -1,3 +1,4 @@
+import path from "path";
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -17,6 +18,8 @@ const app = express();
 
 const PORT = process.env.PORT || 8800;
 
+const __dirname = path.resolve();
+
 // MONGODB CONNECTION
 dbConnection();
 
@@ -35,6 +38,11 @@ app.use(router);
 
 //error middleware
 app.use(errorMiddleware);
+
+app.use(express.static(path.join(__dirname, "/client/dist")));
+app.get("*",(req,res)=>{
+    res.sendFile(path.join(__dirname, "/client/dist/index.html"));
+})
 
 app.listen(PORT, () => {
   console.log(`Dev Server running on port: ${PORT}`);
